@@ -25,7 +25,7 @@ function BlogList() {
             width="300"
           />
           {/* <p>{post.fields.body.content[0].content[0].value}</p> */}
-          <p>{post.fields.body}</p>
+          <p>{post.fields.body.content.value}</p>
         </div>
       ))}
     </div>

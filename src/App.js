@@ -13,7 +13,7 @@ function BlogList() {
       .catch(console.error);
   }, []);
 
-  console.log(post);
+  console.log(post.fields.body);
 
   return (
     <div>
@@ -27,7 +27,6 @@ function BlogList() {
             width="300"
           />
           {/* <p>{post.fields.body.content[0].content[0].value}</p> */}
-          <p>{post.fields.body.content.value}</p>
         </div>
       ))}
     </div>

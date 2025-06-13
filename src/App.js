@@ -13,6 +13,8 @@ function BlogList() {
       .catch(console.error);
   }, []);
 
+  console.log(post);
+
   return (
     <div>
       <h1>Blog Posts</h1>

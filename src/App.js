@@ -13,7 +13,7 @@ function BlogList() {
       .catch(console.error);
   }, []);
 
-  console.log(post.fields.body);
+  console.log(posts);
 
   return (
     <div>

@@ -5,16 +5,21 @@ import { motion } from 'framer-motion';
 interface FormData {
   title: string;
   content: string;
+  excerpt: string;
+  imageUrl: string;
 }
 
 export const CreatePost = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     // In a real app, this would send the data to an API
     console.log('Form submitted:', data);
-    navigate('/');
+    // Mock successful submission
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
   };
 
   return (
@@ -48,6 +53,46 @@ export const CreatePost = () => {
             </p>
           )}
         </div>
+
+        <div>
+          <label
+            htmlFor="excerpt"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            Excerpt
+          </label>
+          <textarea
+            id="excerpt"
+            rows={3}
+            {...register('excerpt', { required: 'Excerpt is required' })}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                     focus:ring-2 focus:ring-secondary focus:border-transparent"
+          />
+          {errors.excerpt && (
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+              {errors.excerpt.message}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label
+            htmlFor="imageUrl"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            Featured Image URL
+          </label>
+          <input
+            type="text"
+            id="imageUrl"
+            {...register('imageUrl')}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                     focus:ring-2 focus:ring-secondary focus:border-transparent"
+          />
+        </div>
+
         <div>
           <label
             htmlFor="content"
@@ -69,14 +114,16 @@ export const CreatePost = () => {
             </p>
           )}
         </div>
+
         <motion.button
           type="submit"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full px-6 py-3 bg-secondary text-white rounded-md
-                   hover:bg-opacity-90 transition-colors"
+          className="w-full py-3 px-6 bg-secondary hover:bg-secondary-dark text-white
+                   rounded-md shadow-sm text-lg font-medium transition-colors
+                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
         >
-          Publish Post
+          Create Post
         </motion.button>
       </form>
     </motion.div>

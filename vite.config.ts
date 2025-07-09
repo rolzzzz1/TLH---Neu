@@ -15,20 +15,23 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
-      external: ['/assets/index-CBoJc9cg.js'],
       input: {
         main: resolve(__dirname, 'index.html'),
       },
       output: {
-        manualChunks: undefined,
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js',
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'index-CBoJc9cg.js') {
-            return 'assets/[name].[ext]';
+          const info = assetInfo.name.split('.')
+          const ext = info[info.length - 1]
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+            return `assets/images/[name][extname]`
           }
-          return 'assets/[name].[hash].[ext]';
+          if (ext === 'css') {
+            return `assets/[name].css`
+          }
+          return `assets/[name][extname]`
         },
-        chunkFileNames: 'assets/[name].[hash].js',
-        entryFileNames: 'assets/[name].[hash].js',
       },
     },
   },
@@ -37,6 +40,5 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
-  assetsInclude: ['**/*.js'],
   base: '/',
 }) 

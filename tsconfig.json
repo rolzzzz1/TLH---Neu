@@ -16,7 +16,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client"],
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

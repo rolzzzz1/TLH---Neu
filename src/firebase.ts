@@ -26,19 +26,25 @@ const storage = getStorage(app);
 const initializePersistence = async () => {
   try {
     await enableMultiTabIndexedDbPersistence(db)
-      .catch(async (err: FirestoreError) => {
+      .catch(async () => {
         console.warn('Multi-tab persistence failed, falling back to single-tab persistence');
         // If multi-tab fails, try single-tab persistence
-        await enableIndexedDbPersistence(db)
-          .catch((err: FirestoreError) => {
-            if (err.code === 'failed-precondition') {
+        try {
+          await enableIndexedDbPersistence(db);
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            const firestoreErr = err as FirestoreError;
+            if (firestoreErr.code === 'failed-precondition') {
               console.warn('Firebase persistence failed: Multiple tabs open');
-            } else if (err.code === 'unimplemented') {
+            } else if (firestoreErr.code === 'unimplemented') {
               console.warn('Firebase persistence failed: Browser not supported');
             } else {
-              console.error('Firebase persistence failed:', err);
+              console.error('Firebase persistence failed:', firestoreErr);
             }
-          });
+          } else {
+            console.error('Unknown error during persistence initialization:', err);
+          }
+        }
       });
   } catch (error) {
     console.error('Error initializing Firebase persistence:', error);
@@ -55,6 +61,6 @@ if (import.meta.env.DEV) {
 }
 
 // Initialize persistence
-initializePersistence().catch(console.error);
+void initializePersistence();
 
 export { db, storage }; 

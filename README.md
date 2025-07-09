@@ -28,7 +28,7 @@ A modern blog platform for audio enthusiasts, built with React, TypeScript, Fire
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/rolzzzz1/the-listening-home.git
+   git clone https://github.com/yourusername/the-listening-home.git
    cd the-listening-home
    ```
 
@@ -60,7 +60,7 @@ A modern blog platform for audio enthusiasts, built with React, TypeScript, Fire
    npm run dev
    ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## Building for Production
 
@@ -74,16 +74,16 @@ A modern blog platform for audio enthusiasts, built with React, TypeScript, Fire
    npm run preview
    ```
 
-## Deployment
+## Project Structure
 
-The project is configured for deployment on Netlify. To deploy:
-
-1. Push your code to GitHub
-2. Connect your repository to Netlify
-3. Configure the build settings:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-4. Add your environment variables in Netlify's dashboard
+```
+src/
+├── components/       # Reusable UI components
+├── pages/           # Page components
+├── App.tsx          # Main app component
+├── main.tsx         # Entry point
+└── index.css        # Global styles
+```
 
 ## Contributing
 

@@ -1,58 +1,25 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { createPost } from '../lib/firebase';
 
-interface CreatePostForm {
+interface FormData {
   title: string;
   content: string;
   category: string;
-  imageUrl: string;
-  author: {
-    name: string;
-  };
 }
 
 export const CreatePost: React.FC = () => {
-  const navigate = useNavigate();
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CreatePostForm>();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-  const onSubmit = async (data: CreatePostForm) => {
-    try {
-      setSubmitting(true);
-      setError(null);
-      const postId = await createPost({
-        ...data,
-        createdAt: new Date(),
-        readTime: '5 min read', // This should be calculated based on content length
-      });
-      navigate(`/post/${postId}`);
-    } catch (err) {
-      console.error('Error creating post:', err);
-      setError('Failed to create the post. Please try again later.');
-    } finally {
-      setSubmitting(false);
-    }
+  const onSubmit = (data: FormData) => {
+    // This would normally save to Firebase
+    console.log('Form submitted:', data);
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+    <div className="max-w-3xl mx-auto">
+      <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
         Create New Post
       </h1>
-
-      {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-6">
-          <p className="text-sm text-red-600 dark:text-red-300">{error}</p>
-        </div>
-      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
@@ -63,10 +30,10 @@ export const CreatePost: React.FC = () => {
             type="text"
             id="title"
             {...register('title', { required: 'Title is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
           {errors.title && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title.message}</p>
+            <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
           )}
         </div>
 
@@ -74,69 +41,43 @@ export const CreatePost: React.FC = () => {
           <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Category
           </label>
-          <input
-            type="text"
+          <select
             id="category"
             {...register('category', { required: 'Category is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          >
+            <option value="">Select a category</option>
+            <option value="Audio Production">Audio Production</option>
+            <option value="Equipment">Equipment</option>
+            <option value="Industry News">Industry News</option>
+            <option value="Tutorials">Tutorials</option>
+          </select>
           {errors.category && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.category.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Image URL
-          </label>
-          <input
-            type="url"
-            id="imageUrl"
-            {...register('imageUrl', { required: 'Image URL is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-          {errors.imageUrl && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.imageUrl.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="authorName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Author Name
-          </label>
-          <input
-            type="text"
-            id="authorName"
-            {...register('author.name', { required: 'Author name is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-          {errors.author?.name && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.author.name.message}</p>
+            <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
           )}
         </div>
 
         <div>
           <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Content
+            Content (Markdown supported)
           </label>
           <textarea
             id="content"
-            rows={10}
+            rows={15}
             {...register('content', { required: 'Content is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
           {errors.content && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.content.message}</p>
+            <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
           )}
         </div>
 
-        <div className="flex justify-end">
+        <div>
           <button
             type="submit"
-            disabled={submitting}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            {submitting ? 'Creating...' : 'Create Post'}
+            Create Post
           </button>
         </div>
       </form>

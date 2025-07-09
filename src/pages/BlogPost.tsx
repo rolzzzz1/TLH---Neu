@@ -7,7 +7,7 @@ export const BlogPost = () => {
   
   // Mock post data - in a real app, this would come from an API
   const post = {
-    id: 1,
+    id: parseInt(id || '1'),
     title: 'Welcome to The Listening Home',
     content: `
       Music has always been a powerful force in human culture, bringing people together

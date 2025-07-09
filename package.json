@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "scripts": {
     "dev": "vite",
@@ -40,7 +40,10 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not ie <= 11",
+      "not android <= 4.4",
+      "not samsung <= 4"
     ],
     "development": [
       "last 1 chrome version",

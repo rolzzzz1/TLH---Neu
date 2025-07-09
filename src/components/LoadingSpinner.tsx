@@ -1,19 +1,36 @@
-import React from 'react';
+import { motion } from 'framer-motion';
 
 interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: number;
+  color?: string;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md' }) => {
-  const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-8 w-8',
-    lg: 'h-12 w-12'
-  };
-
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = 40,
+  color = '#646cff'
+}) => {
   return (
-    <div className="flex justify-center items-center">
-      <div className={`animate-spin rounded-full border-t-2 border-b-2 border-indigo-500 ${sizeClasses[size]}`}></div>
-    </div>
+    <motion.div
+      className="flex items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        style={{
+          width: size,
+          height: size,
+          border: `4px solid ${color}`,
+          borderBottomColor: 'transparent',
+          borderRadius: '50%',
+        }}
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 1,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
+    </motion.div>
   );
 }; 

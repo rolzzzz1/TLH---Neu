@@ -1,86 +1,84 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { motion } from 'framer-motion';
 
 interface FormData {
   title: string;
   content: string;
-  category: string;
 }
 
-export const CreatePost: React.FC = () => {
+export const CreatePost = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
-    // This would normally save to Firebase
+    // In a real app, this would send the data to an API
     console.log('Form submitted:', data);
+    navigate('/');
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-3xl mx-auto"
+    >
       <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
         Create New Post
       </h1>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
             Title
           </label>
           <input
             type="text"
             id="title"
             {...register('title', { required: 'Title is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                     focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
           {errors.title && (
-            <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+              {errors.title.message}
+            </p>
           )}
         </div>
-
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Category
-          </label>
-          <select
-            id="category"
-            {...register('category', { required: 'Category is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
-            <option value="">Select a category</option>
-            <option value="Audio Production">Audio Production</option>
-            <option value="Equipment">Equipment</option>
-            <option value="Industry News">Industry News</option>
-            <option value="Tutorials">Tutorials</option>
-          </select>
-          {errors.category && (
-            <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Content (Markdown supported)
+            Content
           </label>
           <textarea
             id="content"
-            rows={15}
+            rows={10}
             {...register('content', { required: 'Content is required' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                     focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
           {errors.content && (
-            <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+              {errors.content.message}
+            </p>
           )}
         </div>
-
-        <div>
-          <button
-            type="submit"
-            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Create Post
-          </button>
-        </div>
+        <motion.button
+          type="submit"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full px-6 py-3 bg-secondary text-white rounded-md
+                   hover:bg-opacity-90 transition-colors"
+        >
+          Publish Post
+        </motion.button>
       </form>
-    </div>
+    </motion.div>
   );
 }; 

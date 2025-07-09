@@ -1,5 +1,4 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
@@ -7,18 +6,20 @@ import { BlogPost } from './pages/BlogPost';
 import { CreatePost } from './pages/CreatePost';
 import { NotFound } from './pages/NotFound';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Layout>
+    <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/post/:id" element={<BlogPost />} />
-        <Route path="/create" element={<CreatePost />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="post/:id" element={<BlogPost />} />
+          <Route path="create" element={<CreatePost />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
-    </Layout>
+    </Router>
   );
-};
+}
 
 export default App; 

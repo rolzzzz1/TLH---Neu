@@ -1,42 +1,38 @@
-import React from 'react';
+import { motion } from 'framer-motion';
 
-export const About: React.FC = () => {
+export const About = () => {
   return (
-    <div className="max-w-3xl mx-auto">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-3xl mx-auto"
+    >
       <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
         About The Listening Home
       </h1>
-      
       <div className="prose dark:prose-invert">
-        <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-          Welcome to The Listening Home, your premier destination for all things audio. We're passionate about helping both beginners and professionals navigate the exciting world of audio production, music creation, and sound engineering.
+        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+          Welcome to The Listening Home, a community-driven blog dedicated to the art and
+          experience of music appreciation. Our mission is to create a space where music
+          enthusiasts can share their insights, discoveries, and the profound impact that
+          music has on their lives.
         </p>
-
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
-          Our Mission
-        </h2>
-        <p className="text-gray-600 dark:text-gray-300 mb-6">
-          Our mission is to provide high-quality, accessible information about audio production, equipment reviews, and industry insights. We believe that everyone should have access to the knowledge and tools they need to create amazing audio content.
+        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+          Whether you're a casual listener, an audiophile, or a musician, we believe that
+          everyone's perspective on music is valuable and worth sharing. Our platform
+          encourages thoughtful discussion, deep analysis, and the celebration of all
+          genres and styles of music.
         </p>
-
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
-          What We Cover
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white my-6">
+          Our Values
         </h2>
-        <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6">
-          <li>Audio Production Techniques</li>
-          <li>Equipment Reviews and Recommendations</li>
-          <li>Music Industry News and Insights</li>
-          <li>Recording and Mixing Tips</li>
-          <li>Sound Design and Engineering</li>
+        <ul className="list-disc list-inside space-y-4 text-gray-700 dark:text-gray-300">
+          <li>Open-mindedness and respect for all musical preferences</li>
+          <li>Thoughtful and constructive discussion</li>
+          <li>Supporting and promoting musical diversity</li>
+          <li>Sharing knowledge and experiences</li>
         </ul>
-
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
-          Get in Touch
-        </h2>
-        <p className="text-gray-600 dark:text-gray-300">
-          Have questions or suggestions? We'd love to hear from you! Reach out to us at contact@thelisteninghome.com
-        </p>
       </div>
-    </div>
+    </motion.div>
   );
 }; 

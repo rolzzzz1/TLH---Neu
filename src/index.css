@@ -4,12 +4,18 @@
 
 @layer base {
   body {
-    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white;
+    @apply min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
+
+@layer utilities {
+  .transition-colors {
+    @apply transition-all duration-200;
+  }
+} 

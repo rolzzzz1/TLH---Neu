@@ -1,21 +1,24 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-export const NotFound: React.FC = () => {
+export const NotFound = () => {
   return (
-    <div className="min-h-[50vh] flex flex-col items-center justify-center">
-      <h1 className="text-6xl font-bold text-gray-900 dark:text-white mb-4">
-        404
-      </h1>
-      <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex flex-col items-center justify-center min-h-[60vh] text-center"
+    >
+      <h1 className="text-6xl font-bold text-gray-900 dark:text-white mb-4">404</h1>
+      <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
         Oops! The page you're looking for doesn't exist.
       </p>
       <Link
         to="/"
-        className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+        className="px-6 py-3 bg-secondary text-white rounded-md hover:bg-opacity-90
+                 transition-colors"
       >
-        Go back home
+        Go Back Home
       </Link>
-    </div>
+    </motion.div>
   );
 }; 

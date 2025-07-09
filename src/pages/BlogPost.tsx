@@ -1,66 +1,58 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
+import { motion } from 'framer-motion';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 
-export const BlogPost: React.FC = () => {
-  // Removed unused id parameter
-  useParams();
+export const BlogPost = () => {
+  const { id } = useParams();
   
-  // This would normally come from your Firebase database
+  // Mock post data - in a real app, this would come from an API
   const post = {
-    title: 'Getting Started with Audio Production',
+    id: 1,
+    title: 'Welcome to The Listening Home',
     content: `
-# Getting Started with Audio Production
-
-Audio production is an exciting field that combines creativity with technical expertise. Whether you're interested in music production, podcasting, or sound design, understanding the basics is crucial.
-
-## Essential Equipment
-
-1. **Digital Audio Workstation (DAW)**
-   - Industry standard software for recording and editing
-   - Popular options include Pro Tools, Logic Pro, and Ableton Live
-
-2. **Audio Interface**
-   - Converts analog signals to digital
-   - Provides high-quality inputs for microphones and instruments
-
-3. **Microphones**
-   - Different types for different purposes
-   - Consider condenser mics for studio work
-   - Dynamic mics for live performance
-
-## Basic Concepts
-
-Understanding these fundamental concepts will help you get started:
-
-- **Sample Rate**: How many times per second audio is captured
-- **Bit Depth**: The resolution of each sample
-- **Latency**: The delay between input and output
-- **Gain Staging**: Proper management of signal levels
-
-## Next Steps
-
-Once you have your basic setup, start with simple recording projects to learn your tools. Practice is key to improving your skills.
+      Music has always been a powerful force in human culture, bringing people together
+      and creating shared experiences that transcend language and borders. At The
+      Listening Home, we believe in the transformative power of music and its ability
+      to connect, heal, and inspire.
+      
+      Our journey begins here, with a commitment to exploring the vast landscape of
+      musical expression and sharing our discoveries with fellow enthusiasts. Whether
+      you're here to dive deep into music analysis, share your favorite albums, or
+      simply connect with other music lovers, we welcome you to our community.
     `,
-    author: 'John Doe',
-    date: '2024-02-20',
-    category: 'Audio Production'
+    date: '2023-04-20',
+    author: 'The Listening Home Team',
   };
 
-  return (
-    <article className="max-w-3xl mx-auto">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          {post.title}
-        </h1>
-        <div className="text-gray-600 dark:text-gray-400">
-          By {post.author} • {post.date} • {post.category}
-        </div>
-      </header>
+  if (!post) {
+    return <LoadingSpinner />;
+  }
 
-      <div className="prose dark:prose-invert max-w-none">
-        <ReactMarkdown>{post.content}</ReactMarkdown>
+  return (
+    <motion.article
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="max-w-3xl mx-auto"
+    >
+      <motion.h1
+        initial={{ y: -20 }}
+        animate={{ y: 0 }}
+        className="text-4xl font-bold text-gray-900 dark:text-white mb-4"
+      >
+        {post.title}
+      </motion.h1>
+      <div className="flex items-center text-gray-600 dark:text-gray-400 mb-8">
+        <span>{new Date(post.date).toLocaleDateString()}</span>
+        <span className="mx-2">•</span>
+        <span>{post.author}</span>
       </div>
-    </article>
+      <div className="prose dark:prose-invert max-w-none">
+        {post.content.split('\n').map((paragraph, index) => (
+          <p key={index} className="text-gray-700 dark:text-gray-300 mb-4">
+            {paragraph.trim()}
+          </p>
+        ))}
+      </div>
+    </motion.article>
   );
 }; 

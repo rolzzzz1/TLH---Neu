@@ -1,10 +1,10 @@
 import { initializeApp, getApps, FirebaseConfig } from 'firebase/app';
 import { 
   getFirestore, 
-  enableIndexedDbPersistence, 
-  enableMultiTabIndexedDbPersistence, 
-  connectFirestoreEmulator,
-  FirestoreError
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  connectFirestoreEmulator
 } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
@@ -19,48 +19,23 @@ const firebaseConfig: FirebaseConfig = {
 
 // Initialize Firebase only if it hasn't been initialized yet
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
-const storage = getStorage(app);
 
-// Try to enable multi-tab persistence first
-const initializePersistence = async () => {
-  try {
-    await enableMultiTabIndexedDbPersistence(db)
-      .catch(async () => {
-        console.warn('Multi-tab persistence failed, falling back to single-tab persistence');
-        // If multi-tab fails, try single-tab persistence
-        try {
-          await enableIndexedDbPersistence(db);
-        } catch (err: unknown) {
-          if (err instanceof Error) {
-            const firestoreErr = err as FirestoreError;
-            if (firestoreErr.code === 'failed-precondition') {
-              console.warn('Firebase persistence failed: Multiple tabs open');
-            } else if (firestoreErr.code === 'unimplemented') {
-              console.warn('Firebase persistence failed: Browser not supported');
-            } else {
-              console.error('Firebase persistence failed:', firestoreErr);
-            }
-          } else {
-            console.error('Unknown error during persistence initialization:', err);
-          }
-        }
-      });
-  } catch (error) {
-    console.error('Error initializing Firebase persistence:', error);
-  }
-};
+// Initialize Firestore with persistent cache and multi-tab support
+const db = initializeFirestore(app, {
+  localCache: persistentLocalCache({
+    tabManager: persistentMultipleTabManager()
+  })
+});
+
+const storage = getStorage(app);
 
 // Use emulator in development
 if (import.meta.env.DEV) {
   try {
     connectFirestoreEmulator(db, 'localhost', 8080);
   } catch (error) {
-    console.warn('Failed to connect to Firestore emulator:', error);
+    console.error('Failed to connect to Firestore emulator:', error);
   }
 }
-
-// Initialize persistence
-void initializePersistence();
 
 export { db, storage }; 

@@ -1,25 +1,28 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 3000,
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
       output: {
-        entryFileNames: 'assets/index-CBoJc9cg.js',
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'index.css') {
-            return 'assets/index-C2RUWf4B.css';
-          }
-          return 'assets/[name].[ext]';
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'firebase-vendor': ['firebase', '@firebase/app', '@firebase/firestore', '@firebase/storage']
         }
       }
     }
   },
-  base: '/'
-}) 
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', 'firebase']
+  }
+}); 

@@ -14,21 +14,22 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
-      external: ['firebase/app', 'firebase/firestore', 'firebase/storage'],
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom']
-        },
-        globals: {
-          'firebase/app': 'firebase',
-          'firebase/firestore': 'firestore',
-          'firebase/storage': 'storage'
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'firebase-vendor': ['firebase/app', 'firebase/firestore', 'firebase/storage']
         }
       }
     }
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
-    exclude: ['firebase', '@firebase/app', '@firebase/firestore', '@firebase/storage']
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'firebase/app',
+      'firebase/firestore',
+      'firebase/storage'
+    ]
   }
 }); 

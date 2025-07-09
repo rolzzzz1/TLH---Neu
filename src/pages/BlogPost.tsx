@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 export const BlogPost: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  // Removed unused id parameter
+  useParams();
   
   // This would normally come from your Firebase database
   const post = {

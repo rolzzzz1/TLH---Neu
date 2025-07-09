@@ -1,46 +1,79 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { BlogPostCard } from '../components/BlogPostCard';
+import BlogPostCard from '../components/BlogPostCard';
+import { db } from '../firebase';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 
-const posts = [
-  {
-    id: "1",
-    title: 'Welcome to The Listening Home',
-    excerpt: 'A place where music lovers come together to share their experiences and discoveries.',
-    date: '2023-04-20',
-    imageUrl: '/images/featured/welcome.jpg'
-  },
-  {
-    id: "2",
-    title: 'The Art of Active Listening',
-    excerpt: 'Learn how to truly immerse yourself in music and discover new layers of sound.',
-    date: '2023-04-21',
-    imageUrl: '/images/featured/active-listening.jpg'
-  },
-  {
-    id: "3",
-    title: 'Understanding Music Production',
-    excerpt: 'A deep dive into the world of music production and recording techniques.',
-    date: '2023-04-22',
-    imageUrl: '/images/featured/music-production.jpg'
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  imageUrl: string;
+  createdAt: string;
+}
+
+export default function Home() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const postsRef = collection(db, 'posts');
+        const q = query(postsRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const fetchedPosts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as BlogPost[];
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="h-56 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-4" />
+              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2" />
+              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/2" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
-];
 
-export const Home = () => {
   return (
-    <div className="space-y-8">
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-4xl font-bold text-gray-900 dark:text-white mb-8"
+    <div className="container mx-auto py-12">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-12"
       >
-        Latest Posts
-      </motion.h1>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <BlogPostCard key={post.id} post={post} />
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-secondary dark:text-white">
+          Welcome to The Listening Home
+        </h1>
+        <p className="text-secondary/70 dark:text-gray-400 max-w-2xl mx-auto">
+          Discover the latest insights, stories, and discussions about music, sound, and the art of listening.
+        </p>
+      </motion.div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map(post => (
+          <BlogPostCard key={post.id} {...post} />
         ))}
       </div>
     </div>
   );
-}; 
+} 

@@ -1,66 +1,47 @@
-import { useState, useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Logo } from './Logo';
+import { Link } from 'react-router-dom';
+import { useTheme } from '../hooks/useTheme';
 
-export const Layout = () => {
-  const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem('darkMode');
-    return saved ? JSON.parse(saved) : false;
-  });
+interface LayoutProps {
+  children: React.ReactNode;
+}
 
-  useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
+export default function Layout({ children }: LayoutProps) {
+  const { isDarkMode, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
-      <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Logo />
-          <div className="flex items-center space-x-6">
-            <Link
-              to="/"
-              className="text-gray-700 dark:text-gray-300 hover:text-secondary dark:hover:text-secondary transition-colors"
-            >
-              Home
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="bg-white text-secondary dark:bg-dark-lightest dark:text-white transition-colors duration-200">
+        <header className="container mx-auto py-6">
+          <nav className="flex items-center justify-between">
+            <Link to="/" className="text-2xl font-bold text-primary dark:text-primary-light transition-colors">
+              The Listening Home
             </Link>
-            <Link
-              to="/about"
-              className="text-gray-700 dark:text-gray-300 hover:text-secondary dark:hover:text-secondary transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              to="/create"
-              className="text-gray-700 dark:text-gray-300 hover:text-secondary dark:hover:text-secondary transition-colors"
-            >
-              Create Post
-            </Link>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800"
-            >
-              {darkMode ? '🌞' : '🌙'}
-            </motion.button>
+            <div className="flex items-center space-x-6">
+              <Link to="/" className="text-secondary/70 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+                Home
+              </Link>
+              <Link to="/about" className="text-secondary/70 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+                About
+              </Link>
+              <Link to="/create" className="text-secondary/70 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+                Create Post
+              </Link>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-primary/10 dark:bg-white/10 text-primary dark:text-primary-light transition-colors"
+              >
+                {isDarkMode ? '🌞' : '🌙'}
+              </button>
+            </div>
+          </nav>
+        </header>
+        <main>{children}</main>
+        <footer className="container mx-auto py-8 mt-auto">
+          <div className="text-center text-secondary/60 dark:text-gray-400">
+            © {new Date().getFullYear()} The Listening Home. All rights reserved.
           </div>
-        </nav>
-      </header>
-      <main className="container mx-auto px-4 py-8">
-        <Outlet />
-      </main>
-      <footer className="bg-gray-100 dark:bg-gray-800 py-6 mt-auto">
-        <div className="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
-          © {new Date().getFullYear()} The Listening Home. All rights reserved.
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
-}; 
+} 

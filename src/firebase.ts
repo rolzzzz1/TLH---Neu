@@ -1,8 +1,8 @@
-import { initializeApp, getApps } from 'firebase/app';
+import { initializeApp, getApps, FirebaseConfig } from 'firebase/app';
 import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
-const firebaseConfig = {
+const firebaseConfig: FirebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
@@ -17,7 +17,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 // Enable offline persistence
-enableIndexedDbPersistence(db).catch((err) => {
+enableIndexedDbPersistence(db).catch((err: { code: string }) => {
   if (err.code === 'failed-precondition') {
     // Multiple tabs open, persistence can only be enabled in one tab at a time
     console.warn('Firebase persistence failed: Multiple tabs open');
